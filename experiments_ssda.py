@@ -37,10 +37,17 @@ if __name__ == "__main__":
     # Sources-target pairs for training
     pairs = []
     uids = []
+    args = []
+
+    heterogeneous_experiments = [
+        ("0,1", "2"),      # acc xy to z
+        ("0,1", "1,2"),    # acc xy to yz
+        ("0,1", "0,1,2"),  # acc xy to xyz
+    ]
 
     for name in datasets.list_datasets():
-        # Tune on "watch_noother" not "watch"
-        if name == "watch":
+        # For now just try on ucihar and ucihhar
+        if "uci" not in name:
             continue
 
         users = datasets.get_dataset_users(name)
@@ -50,41 +57,48 @@ if __name__ == "__main__":
         # to each sources-target pair
         uid = 0
 
-        # Make this repeatable
-        random.seed(42)
+        for source_features, target_features in heterogeneous_experiments:
+            # Make this repeatable
+            random.seed(42)
 
-        # Allows extra max_users for some datasets without changin uid's
-        #
-        # TODO get rid of all this confusing code once we decide what number
-        # to set max_users to. If we don't need to change max_users, then
-        # we can just increment uid's like before.
-        bonus_uid = 0
+            # Allows extra max_users for some datasets without changin uid's
+            #
+            # TODO get rid of all this confusing code once we decide what number
+            # to set max_users to. If we don't need to change max_users, then
+            # we can just increment uid's like before.
+            bonus_uid = 0
 
-        max_number = 10
+            max_number = 10
 
-        curr_pairs = generate_single_source(name, users, max_number=max_number)
+            curr_pairs = generate_single_source(name, users,
+                max_number=max_number)
 
-        for i, (dataset_name, source_users, target_user) in enumerate(curr_pairs):
-            # We want to allow increasing the number of max_users for
-            # wisdm_at and watch without changing the uid's of the 0-4
-            # targets for backwards compatibility (otherwise we have to move
-            # all the models around...)
-            set_of_five = i // 5
+            for i, (dataset_name, source_users, target_user) in enumerate(curr_pairs):
+                # We want to allow increasing the number of max_users for
+                # wisdm_at and watch without changing the uid's of the 0-4
+                # targets for backwards compatibility (otherwise we have to move
+                # all the models around...)
+                set_of_five = i // 5
 
-            # before we had 0-4 (or 1-5), so do as before
-            if max_number == 5 or set_of_five == 0:
-                uids.append(uid)
-                uid += 1
-            else:
-                uids.append(str(uid)+"_"+str(bonus_uid))
-                bonus_uid += 1
+                # before we had 0-4 (or 1-5), so do as before
+                if max_number == 5 or set_of_five == 0:
+                    uids.append(uid)
+                    uid += 1
+                else:
+                    uids.append(str(uid)+"_"+str(bonus_uid))
+                    bonus_uid += 1
 
-        pairs += curr_pairs
+                # Which features to use
+                args.append("--source_feature_subset=" + source_features
+                    + " --target_feature_subset=" + target_features)
+
+            pairs += curr_pairs
 
     # Check that these make sense
     print("List of adaptations we'll perform:")
     for i, (dataset_name, source, target) in enumerate(pairs):
-        print("    ", dataset_name, source, "to", target, "uid", uids[i])
+        print("    ", dataset_name, source, "to", target, "uid", uids[i],
+            "args", args[i])
     print()
 
     #
@@ -93,6 +107,7 @@ if __name__ == "__main__":
     print("For kamiak_{train,eval}_ssda.srun:")
     dataset_names = []
     print_uids = []
+    print_args = []
     sources = []
     targets = []
     dataset_target_pairs = {}  # for upper bounds
@@ -101,10 +116,13 @@ if __name__ == "__main__":
         print_uids.append(str(uids[i]))
         sources.append("\""+source+"\"")
         targets.append("\""+target+"\"")
+        print_args.append("\""+str(args[i])+"\"")
 
         # for upper bounds
-        pair_name = ("\""+dataset_name+"\"", "\""+target+"\"")
-        full_pair = ("\""+dataset_name+"\"", str(uids[i]), "\""+target+"\"")
+        pair_name = ("\""+dataset_name+"\"", "\""+target+"\"",
+            "\""+str(args[i])+"\"")
+        full_pair = ("\""+dataset_name+"\"", str(uids[i]), "\""+target+"\"",
+            "\""+str(args[i])+"\"")
         if pair_name not in dataset_target_pairs:
             dataset_target_pairs[pair_name] = full_pair
 
@@ -113,6 +131,7 @@ if __name__ == "__main__":
     print("datasets=(", " ".join(dataset_names), ")", sep="")
     print("sources=(", " ".join(sources), ")", sep="")
     print("targets=(", " ".join(targets), ")", sep="")
+    print("args=(", " ".join(print_args), ")", sep="")
     print()
 
     #
@@ -124,12 +143,14 @@ if __name__ == "__main__":
     sources_blank = ["\"\""]*len(targets_unique)
 
     targets_unique_uids = []
+    targets_unique_args = []
     targets_unique_dataset = []
     targets_unique_target = []
 
-    for dataset_name, uid, target in targets_unique:
+    for dataset_name, uid, target, args in targets_unique:
         # Uses first uid from dataset_name-target
         targets_unique_uids.append(uid)
+        targets_unique_args.append(args)
         targets_unique_dataset.append(dataset_name)
         targets_unique_target.append(target)
 
@@ -138,4 +159,5 @@ if __name__ == "__main__":
     print("datasets=(", " ".join(targets_unique_dataset), ")", sep="")
     print("sources=(", " ".join(sources_blank), ")", sep="")
     print("targets=(", " ".join(targets_unique_target), ")", sep="")
+    print("args=(", " ".join(targets_unique_args), ")", sep="")
     print()

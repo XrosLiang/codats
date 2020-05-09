@@ -7,7 +7,7 @@
 #SBATCH --partition=cook,free_gpu,cahnrs_gpu,kamiak
 #SBATCH --time=1-00:00:00
 #SBATCH --mem=20G
-#SBATCH --array=0-128
+#SBATCH --array=0-116
 
 #
 # Upper bound separate since there's a lot of duplicates if we were to run it
@@ -31,11 +31,12 @@ suffix=$1; shift
 
 methods=("upper")
 debugnums=(1 2 3)
-# number of adaptation problems = 43
-uids=(u0 u1 u2 u3 u4 u5_0 u5_3 u5_4 u0 u1 u4 u5_0 u5_3 u0 u1 u2 u3 u0 u1 u2 u3 u4 u5_0 u5_1 u5_3 u0 u1 u2 u3 u4 u5_0 u5_1 u5_2 u5_3 u0 u1 u2 u3 u4 u5_0 u5_2 u5_3 u5_4)
-datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "uwave" "uwave" "uwave" "uwave" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at")
-sources=("" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "")
-targets=("19" "16" "23" "25" "24" "18" "11" "13" "3" "6" "8" "7" "5" "5" "7" "6" "8" "12" "8" "4" "11" "13" "14" "3" "15" "11" "31" "29" "25" "8" "32" "15" "7" "30" "44" "13" "46" "43" "23" "16" "33" "38" "20")
+# number of adaptation problems = 39
+uids=(u0 u1 u2 u3 u4 u5 u5_0 u5_3 u5_4 u6 u7 u8 u9 u10 u10_0 u10_3 u10_4 u11 u12 u13 u14 u15_0 u15_3 u15_4 u0 u1 u4 u5 u5_0 u5_3 u6 u9 u10 u10_0 u10_3 u11 u14 u15_0 u15_3)
+datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar")
+sources=("" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "")
+targets=("19" "16" "23" "25" "24" "19" "18" "11" "13" "16" "23" "25" "24" "19" "18" "11" "13" "16" "23" "25" "24" "18" "11" "13" "3" "6" "8" "3" "7" "5" "6" "8" "3" "7" "5" "6" "8" "7" "5")
+args=("--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2")
 
 # Make sure we're using the right number
 correct_min=0
@@ -66,6 +67,7 @@ uid="${uids[$index1]}"
 dataset_name="${datasets[$index1]}"
 source="${sources[$index1]}"
 target="${targets[$index1]}"
+other_args="${args[$index1]}"
 
 # Upper bound is actually "none" but without a target domain and with other args
 additional_args=()
@@ -83,13 +85,14 @@ fi
 echo "$suffix #$SLURM_ARRAY_TASK_ID"
 echo "Method: $method"
 echo "DebugNum: $debugnum"
-echo "Other args: $@"
+echo "Other args: $other_args ${additional_args[@]} $@"
 echo "UID: $uid"
 echo "$dataset_name $source --> $target"
 
 cd "$remotedir"
+# Note: don't quote $other_args since it may have spaces between arguments in it
 python3 main.py \
     --logdir="$logFolder-$suffix" --modeldir="$modelFolder-$suffix" \
     --method="$method" --dataset="$dataset_name" --sources="$source" \
     --target="$target" --uid="$uid" --debugnum="$debugnum" \
-    --gpumem=0 "${additional_args[@]}" "$@" || handle_error
+    --gpumem=0 $other_args "${additional_args[@]}" "$@" || handle_error

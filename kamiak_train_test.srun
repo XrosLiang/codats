@@ -5,16 +5,9 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:1
 #SBATCH --partition=cook,free_gpu,cahnrs_gpu,kamiak
-#SBATCH --time=1-00:00:00
+#SBATCH --time=7-00:00:00
 #SBATCH --mem=20G
-#SBATCH --array=0-170
-
-#
-# Upper bound separate since there's a lot of duplicates if we were to run it
-# in kamiak_train_real.srun since for upper bounds the multiple combinations
-# of source domains (or number of them) doesn't affect the result. Thus, just
-# run three of each.
-#
+#SBATCH --array=0-29
 
 . kamiak_config.sh
 . kamiak_tensorflow_gpu.sh
@@ -29,13 +22,14 @@ trap "handle_terminate" SIGTERM SIGINT
 suffix=$1; shift
 [[ -z $suffix ]] && { echo "no suffix specified"; handle_error; }
 
-methods=("upper")
+methods=("dann_hda" "dann_pad" "dann_drop" "none_pad" "none_drop")
 debugnums=(1 2 3)
-# number of adaptation problems = 57
-uids=(u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u5_19 u5_22 u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u5_19 u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u5_19 u5_22 u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u5_19 u5_22 u0 u3 u5_1 u5_4 u5_7 u5_10 u5_13 u5_16 u5_19 u5_22)
-datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at")
-sources=("" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "")
-targets=("21" "4" "1" "24" "9" "8" "25" "5" "29" "18" "1" "0" "5" "2" "8" "4" "7" "6" "3" "2" "1" "6" "3" "8" "7" "5" "4" "11" "2" "1" "12" "5" "4" "10" "3" "6" "13" "7" "1" "23" "8" "32" "28" "4" "30" "3" "21" "40" "7" "1" "47" "17" "15" "14" "8" "6" "34")
+# number of adaptation problems = 2
+uids=(0 1)
+datasets=("ucihar" "ucihar")
+sources=("1" "1")
+targets=("2" "2")
+args=("--model=inceptiontime --source_feature_subset=0,1,2 --target_feature_subset=0,1" "--model=fcn --source_feature_subset=0,1,2 --target_feature_subset=0,1")
 
 # Make sure we're using the right number
 correct_min=0

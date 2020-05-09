@@ -117,11 +117,11 @@ if __name__ == "__main__":
     uids = []
 
     for name in datasets.list_datasets():
-        users = datasets.get_dataset_users(name)
-
-        # Tune on "watch_noother" not "watch"
-        if name == "watch":
+        # For now just try on ucihar and ucihhar
+        if "uci" not in name:
             continue
+
+        users = datasets.get_dataset_users(name)
 
         # Since sources-target aren't stored in filename anymore (too long), we
         # would run into folder name conflicts if we didn't append a unique ID
