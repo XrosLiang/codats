@@ -22,13 +22,14 @@ trap "handle_terminate" SIGTERM SIGINT
 suffix=$1; shift
 [[ -z $suffix ]] && { echo "no suffix specified"; handle_error; }
 
-methods=("vrada" "rdann" "daws" "dann" "none")
+methods=("dann_hda" "dann_pad" "dann_drop" "none_pad" "none_drop")
 variants=("best_target")
 # number of adaptation problems = 60
-uids=(0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4)
-datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "uwave" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_at" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "wisdm_ar" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother" "watch_noother")
-sources=("14" "12" "18" "17" "7" "9" "12" "6" "2" "7" "4" "3" "2" "4" "7" "1" "1" "2" "3" "2" "1" "1" "0" "4" "5" "2" "5" "3" "3" "4" "26" "4" "45" "5" "9" "0" "38" "24" "20" "11" "3" "21" "25" "2" "0" "2" "4" "1" "7" "1" "6" "4" "2" "1" "12" "5" "1" "7" "7" "8")
-targets=("19" "16" "23" "25" "24" "18" "18" "23" "11" "13" "5" "7" "6" "8" "8" "8" "7" "7" "5" "5" "3" "6" "6" "6" "8" "7" "6" "8" "5" "5" "44" "13" "46" "43" "23" "16" "46" "33" "38" "20" "11" "31" "29" "25" "8" "32" "15" "7" "30" "11" "12" "8" "4" "11" "13" "14" "3" "12" "15" "14")
+uids=(0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 5 6 7 8 9 10_0 10_1 10_2 10_3 10_4 10 11 12 13 14 15_0 15_1 15_2 15_3 15_4 0 1 2 3 4 5_0 5_1 5_2 5_3 5_4 5 6 7 8 9 10_0 10_1 10_2 10_3 10_4 10 11 12 13 14 15_0 15_1 15_2 15_3 15_4)
+datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar")
+sources=("14" "12" "18" "17" "7" "9" "12" "6" "2" "7" "14" "12" "18" "17" "7" "9" "12" "6" "2" "7" "14" "12" "18" "17" "7" "9" "12" "6" "2" "7" "1" "1" "0" "4" "5" "2" "5" "3" "3" "4" "1" "1" "0" "4" "5" "2" "5" "3" "3" "4" "1" "1" "0" "4" "5" "2" "5" "3" "3" "4")
+targets=("19" "16" "23" "25" "24" "18" "18" "23" "11" "13" "19" "16" "23" "25" "24" "18" "18" "23" "11" "13" "19" "16" "23" "25" "24" "18" "18" "23" "11" "13" "3" "6" "6" "6" "8" "7" "6" "8" "5" "5" "3" "6" "6" "6" "8" "7" "6" "8" "5" "5" "3" "6" "6" "6" "8" "7" "6" "8" "5" "5")
+args=("--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2")
 
 # Make sure we're using the right number
 correct_min=0
@@ -59,6 +60,7 @@ uid="${uids[$index1]}"
 dataset_name="${datasets[$index1]}"
 source="${sources[$index1]}"
 target="${targets[$index1]}"
+other_args="${args[$index1]}"
 
 # Output name uses method from above not the "none" for "upper"
 out="results/results_${suffix}_$variant-$dataset_name-$uid-$method.yaml"
@@ -74,15 +76,16 @@ fi
 echo "$suffix #$SLURM_ARRAY_TASK_ID"
 echo "Selection: $variant"
 echo "Method: $method"
-echo "Other args: $@"
+echo "Other args: $other_args ${additional_args[@]} $@"
 echo "UID: $uid"
 echo "$dataset_name $source --> $target"
 
 cd "$remotedir"
 mkdir -p results
+# Note: don't quote $other_args since it may have spaces between arguments in it
 python3 main_eval.py \
     --logdir="$logFolder-$suffix" --modeldir="$modelFolder-$suffix" \
     --jobs=1 --gpus=1 --gpumem=0 \
     --match="${dataset_name}-${uid}-${method}-[0-9]*" \
     --selection="$variant" --output_file="$out" \
-    "${additional_args[@]}" "$@" || handle_error
+    $other_args "${additional_args[@]}" "$@" || handle_error

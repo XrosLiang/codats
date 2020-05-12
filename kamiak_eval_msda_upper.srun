@@ -59,6 +59,7 @@ uid="${uids[$index1]}"
 dataset_name="${datasets[$index1]}"
 source="${sources[$index1]}"
 target="${targets[$index1]}"
+other_args="${args[$index1]}"
 
 # Output name uses method from above not the "none" for "upper"
 out="results/results_${suffix}_$variant-$dataset_name-$uid-$method.yaml"
@@ -74,15 +75,16 @@ fi
 echo "$suffix #$SLURM_ARRAY_TASK_ID"
 echo "Selection: $variant"
 echo "Method: $method"
-echo "Other args: $@"
+echo "Other args: $other_args ${additional_args[@]} $@"
 echo "UID: $uid"
 echo "$dataset_name $source --> $target"
 
 cd "$remotedir"
 mkdir -p results
+# Note: don't quote $other_args since it may have spaces between arguments in it
 python3 main_eval.py \
     --logdir="$logFolder-$suffix" --modeldir="$modelFolder-$suffix" \
     --jobs=1 --gpus=1 --gpumem=0 \
     --match="${dataset_name}-${uid}-${method}-[0-9]*" \
     --selection="$variant" --output_file="$out" \
-    "${additional_args[@]}" "$@" || handle_error
+    $other_args "${additional_args[@]}" "$@" || handle_error

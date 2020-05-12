@@ -768,7 +768,8 @@ def output_latex_ss_results(results, output_filename):
     #
     # Create Latex table
     #
-    columns = ["No Adaptation", "R-DANN", "VRADA", "CoDATS", "CoDATS-WS", "Train on Target"]
+    # columns = ["No Adaptation", "R-DANN", "VRADA", "CoDATS", "CoDATS-WS", "Train on Target"]
+    columns = ["Drop-None-H", "Pad-None-H", "Drop-DANN-H", "Pad-DANN-H", "CoDATS-H", "Train on Target"]
 
     # Create table
     table = []
@@ -945,15 +946,20 @@ def main(argv):
     # there isn't a "target" (since target is passed as source), but we all the
     # others we evaluate only with best_target, so we can match all to get the
     # best_source only for the upper bound.
-    make_plots("msda1", "best_target", "*",
-        show_title=show_title, legend_separate=legend_separate, ncol=ncol,
-        suffix=suffix, skip=skip, figsize=figsize, dir_name=outdir,
-        jitter_amount=jitter_amount)
+    # make_plots("msda1", "best_target", "*",
+    #     show_title=show_title, legend_separate=legend_separate, ncol=ncol,
+    #     suffix=suffix, skip=skip, figsize=figsize, dir_name=outdir,
+    #     jitter_amount=jitter_amount)
 
-    table_multisource("msda1", "best_target", "*", output="table_msda.tex")
+    # table_multisource("msda1", "best_target", "*", output="table_msda.tex")
 
-    # Single-source table
-    table_singlesource("ssda1", "best_target", "*", output="table.tex")
+    # Single-source tables
+    table_singlesource("ssda1", "best_target", "*", output="table_xy_z.tex",
+        source_feature_subset="0,1", target_feature_subset="2")
+    table_singlesource("ssda1", "best_target", "*", output="table_xy_yz.tex",
+        source_feature_subset="0,1", target_feature_subset="1,2")
+    table_singlesource("ssda1", "best_target", "*", output="table_xy_xyz.tex",
+        source_feature_subset="0,1", target_feature_subset="0,1,2")
 
 
 if __name__ == "__main__":
