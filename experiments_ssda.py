@@ -40,9 +40,11 @@ if __name__ == "__main__":
     args = []
 
     heterogeneous_experiments = [
-        ("0,1", "2"),      # acc xy to z
-        ("0,1", "1,2"),    # acc xy to yz
-        ("0,1", "0,1,2"),  # acc xy to xyz
+        # ("0,1", "2"),      # acc xy to z
+        # ("0,1", "1,2"),    # acc xy to yz
+        # ("0,1", "0,1,2"),  # acc xy to xyz
+        ("0", "1"),          # acc x to y
+        ("0", "2"),          # acc x to z
     ]
 
     for name in datasets.list_datasets():

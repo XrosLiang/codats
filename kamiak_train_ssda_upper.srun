@@ -7,7 +7,7 @@
 #SBATCH --partition=cook,free_gpu,cahnrs_gpu,kamiak
 #SBATCH --time=1-00:00:00
 #SBATCH --mem=20G
-#SBATCH --array=0-116
+#SBATCH --array=0-77
 
 #
 # Upper bound separate since there's a lot of duplicates if we were to run it
@@ -31,12 +31,12 @@ suffix=$1; shift
 
 methods=("upper")
 debugnums=(1 2 3)
-# number of adaptation problems = 39
-uids=(u0 u1 u2 u3 u4 u5 u5_0 u5_3 u5_4 u6 u7 u8 u9 u10 u10_0 u10_3 u10_4 u11 u12 u13 u14 u15_0 u15_3 u15_4 u0 u1 u4 u5 u5_0 u5_3 u6 u9 u10 u10_0 u10_3 u11 u14 u15_0 u15_3)
-datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar")
-sources=("" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "")
-targets=("19" "16" "23" "25" "24" "19" "18" "11" "13" "16" "23" "25" "24" "19" "18" "11" "13" "16" "23" "25" "24" "18" "11" "13" "3" "6" "8" "3" "7" "5" "6" "8" "3" "7" "5" "6" "8" "7" "5")
-args=("--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2" "--source_feature_subset=0,1 --target_feature_subset=0,1,2")
+# number of adaptation problems = 26
+uids=(u0 u1 u2 u3 u4 u5 u5_0 u5_3 u5_4 u6 u7 u8 u9 u10_0 u10_3 u10_4 u0 u1 u4 u5 u5_0 u5_3 u6 u9 u10_0 u10_3)
+datasets=("ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar" "ucihhar")
+sources=("" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "")
+targets=("19" "16" "23" "25" "24" "19" "18" "11" "13" "16" "23" "25" "24" "18" "11" "13" "3" "6" "8" "3" "7" "5" "6" "8" "7" "5")
+args=("--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=1" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2" "--source_feature_subset=0 --target_feature_subset=2")
 
 # Make sure we're using the right number
 correct_min=0
