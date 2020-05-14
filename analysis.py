@@ -960,6 +960,10 @@ def main(argv):
         source_feature_subset="0,1", target_feature_subset="1,2")
     table_singlesource("ssda1", "best_target", "*", output="table_xy_xyz.tex",
         source_feature_subset="0,1", target_feature_subset="0,1,2")
+    table_singlesource("ssda2", "best_target", "*", output="table_x_y.tex",
+        source_feature_subset="0", target_feature_subset="1")
+    table_singlesource("ssda2", "best_target", "*", output="table_x_z.tex",
+        source_feature_subset="0", target_feature_subset="2")
 
 
 if __name__ == "__main__":
