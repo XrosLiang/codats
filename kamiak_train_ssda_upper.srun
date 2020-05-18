@@ -82,6 +82,9 @@ if [[ $method == "random" ]]; then
     additional_args+=("--log_val_steps=100")
 fi
 
+# HDA defaults
+additional_args=("--ensemble=5", "--moving_average")
+
 echo "$suffix #$SLURM_ARRAY_TASK_ID"
 echo "Method: $method"
 echo "DebugNum: $debugnum"

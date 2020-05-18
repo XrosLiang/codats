@@ -76,6 +76,9 @@ elif [[ $method == "daws" ]]; then
     additional_args+=("--batch_division=sources")
 fi
 
+# HDA defaults
+additional_args=("--ensemble=5", "--moving_average")
+
 echo "$suffix #$SLURM_ARRAY_TASK_ID"
 echo "Method: $method"
 echo "DebugNum: $debugnum"
